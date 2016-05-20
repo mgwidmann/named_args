@@ -1,6 +1,6 @@
 # NamedArgs
 
-Inspired by (Named Arguments with Elixir)[https://blog.praveenperera.com/named-arugments-with-default-values-in-elixir/]
+Inspired by [Named Arguments with Elixir](https://blog.praveenperera.com/named-arugments-with-default-values-in-elixir/)
 
 Allows you to use named arguments similar to Ruby's named arguments. For example, in Ruby
 
