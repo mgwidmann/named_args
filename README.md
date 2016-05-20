@@ -43,8 +43,6 @@ Talk.introduction(birthday: "1986-01-01") # => Hi my name is Sarah and I was bor
 Talk.introduction(birthday: "1986-01-01", name: "Joe") # => Hi my name is Joe and I was born on 1986-01-01
 ```
 
-### NOTE: Still in development!
-
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:

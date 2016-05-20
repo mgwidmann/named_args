@@ -28,8 +28,8 @@ defmodule NamedArgsTest do
 
   defmodule Test2 do
     use NamedArgs
-    def test(:value, opts \\ [key: :value, another: :value]) do
-      opts
+    def test(:value, options \\ [key: :value, another: :value]) do
+      options
     end
   end
 
@@ -48,6 +48,30 @@ defmodule NamedArgsTest do
   test "with other params - both args" do
     assert Test2.test(:value, key: :changed, another: :changed) == [key: :changed, another: :changed]
     assert Test2.test(:value, another: :changed, key: :changed) == [another: :changed, key: :changed]
+  end
+
+  defmodule Test3 do
+    use NamedArgs
+    def test(options \\ %{key: :value, another: :value}) do
+      options
+    end
+  end
+
+  test "map - no args" do
+    assert Test3.test()  == %{key: :value, another: :value}
+  end
+  @tag :focus
+  test "map - one arg" do
+    assert Test3.test(%{key: :changed}) == %{another: :value, key: :changed}
+  end
+
+  test "map - other arg" do
+    assert Test3.test(%{another: :changed}) == %{key: :value, another: :changed}
+  end
+
+  test "map - both args" do
+    assert Test3.test(%{key: :changed, another: :changed}) == %{key: :changed, another: :changed}
+    assert Test3.test(%{another: :changed, key: :changed}) == %{another: :changed, key: :changed}
   end
 
 end
