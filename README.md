@@ -14,7 +14,7 @@ However in Elixir, using a default argument ends up dropping the other values.
 
 ```elixir
 defmodule Talk do  
-  def introduction(options \\ [name: "Sarah", birthday: "1985-12-30"]) do
+  def introduction(opts \\ [name: "Sarah", birthday: "1985-12-30"]) do
     IO.puts "Hi my name is #{opts[:name]} and I was born on #{opts[:birthday]}"
   end
 end
@@ -29,7 +29,7 @@ With `NamedArgs` you can instead do the following:
 ```elixir
 defmodule Talk do
   use NamedArgs
-  def introduction(options \\ [name: "Sarah", birthday: "1985-12-30"]) do
+  def introduction(opts \\ [name: "Sarah", birthday: "1985-12-30"]) do
     IO.puts "Hi my name is #{opts[:name]} and I was born on #{opts[:birthday]}"
   end
 end
