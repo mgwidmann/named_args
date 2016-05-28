@@ -58,3 +58,9 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def application do
           [applications: [:named_args]]
         end
+
+## But it doesn't create a variable with the same name?
+
+Yup, I'm still not sure if thats a desired feature or not. Because it would implicitly create a variable that you may or may not decide to use, it goes against a lot of the philosophies that Elixir follows in regard to explicit coding. And the compiler would warn you about it (and it couldn't be fixed either).
+
+If possible to remove the compiler warning this feature may become more attractive. Please let me know if you have ideas about this!
