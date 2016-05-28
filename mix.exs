@@ -5,8 +5,17 @@ defmodule NamedArgs.Mixfile do
     [app: :named_args,
      version: "0.1.0",
      elixir: "~> 1.0",
+     name: "named_args",
+     source_url: "git@github.com:mgwidmann/named_args.git",
+     homepage_url: "https://github.com/mgwidmann/named_args",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     description: "Ensures default maps and keyword lists have the defaults specified.",
+     docs: [
+       main: NamedArgs,
+       readme: "README.md"
+     ],
+     package: package,
      deps: deps]
   end
 
