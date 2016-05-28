@@ -2,7 +2,7 @@ defmodule NamedArgsTest do
   use ExUnit.Case
   doctest NamedArgs
 
-  defmodule Test do
+  defmodule KeywordArg do
     use NamedArgs
     def test(opts \\ [key: :value, another: :value]) do
       opts
@@ -10,23 +10,23 @@ defmodule NamedArgsTest do
   end
 
   test "no args" do
-    assert Test.test == [key: :value, another: :value]
+    assert KeywordArg.test == [key: :value, another: :value]
   end
 
   test "one arg" do
-    assert Test.test(key: :changed) == [another: :value, key: :changed]
+    assert KeywordArg.test(key: :changed) == [another: :value, key: :changed]
   end
 
   test "other arg" do
-    assert Test.test(another: :changed) == [key: :value, another: :changed]
+    assert KeywordArg.test(another: :changed) == [key: :value, another: :changed]
   end
 
   test "both args" do
-    assert Test.test(key: :changed, another: :changed) == [key: :changed, another: :changed]
-    assert Test.test(another: :changed, key: :changed) == [another: :changed, key: :changed]
+    assert KeywordArg.test(key: :changed, another: :changed) == [key: :changed, another: :changed]
+    assert KeywordArg.test(another: :changed, key: :changed) == [another: :changed, key: :changed]
   end
 
-  defmodule Test2 do
+  defmodule KeywordWithOther do
     use NamedArgs
     def test(:value, options \\ [key: :value, another: :value]) do
       options
@@ -34,44 +34,57 @@ defmodule NamedArgsTest do
   end
 
   test "with other params - no args" do
-    assert Test2.test(:value)  == [key: :value, another: :value]
+    assert KeywordWithOther.test(:value)  == [key: :value, another: :value]
   end
 
   test "with other params - one arg" do
-    assert Test2.test(:value, key: :changed) == [another: :value, key: :changed]
+    assert KeywordWithOther.test(:value, key: :changed) == [another: :value, key: :changed]
   end
 
   test "with other params - other arg" do
-    assert Test2.test(:value, another: :changed) == [key: :value, another: :changed]
+    assert KeywordWithOther.test(:value, another: :changed) == [key: :value, another: :changed]
   end
 
   test "with other params - both args" do
-    assert Test2.test(:value, key: :changed, another: :changed) == [key: :changed, another: :changed]
-    assert Test2.test(:value, another: :changed, key: :changed) == [another: :changed, key: :changed]
+    assert KeywordWithOther.test(:value, key: :changed, another: :changed) == [key: :changed, another: :changed]
+    assert KeywordWithOther.test(:value, another: :changed, key: :changed) == [another: :changed, key: :changed]
   end
 
-  defmodule Test3 do
+  defmodule MapArg do
     use NamedArgs
     def test(options \\ %{key: :value, another: :value}) do
       options
     end
   end
 
-  test "map - no args" do
-    assert Test3.test()  == %{key: :value, another: :value}
-  end
-  @tag :focus
-  test "map - one arg" do
-    assert Test3.test(%{key: :changed}) == %{another: :value, key: :changed}
-  end
-
-  test "map - other arg" do
-    assert Test3.test(%{another: :changed}) == %{key: :value, another: :changed}
+  defmodule SingleMapArg do
+    use NamedArgs
+    def test(options \\ %{key: :value}) do
+      options
+    end
   end
 
-  test "map - both args" do
-    assert Test3.test(%{key: :changed, another: :changed}) == %{key: :changed, another: :changed}
-    assert Test3.test(%{another: :changed, key: :changed}) == %{another: :changed, key: :changed}
+  test "single map - no args" do
+    assert SingleMapArg.test()  == %{key: :value}
+  end
+
+  test "single map - one arg" do
+    assert SingleMapArg.test(%{key: :changed}) == %{key: :changed}
+  end
+
+  defmodule DefaultArgs do
+    use NamedArgs
+    def test(data, another_data \\ 123, more_data \\ :foo) do
+      {data, another_data, more_data}
+    end
+  end
+
+  test "ignores functions with other default params" do
+    assert DefaultArgs.test("data") == {"data", 123, :foo}
+  end
+
+  test "allows using default params as usual" do
+    assert DefaultArgs.test("data", 456, :bar) == {"data", 456, :bar}
   end
 
 end
