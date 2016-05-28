@@ -15,15 +15,26 @@ defmodule NamedArgs do
     end
   end
 
-  defmacro merge_defaults([]), do: nil
-  defmacro merge_defaults([{:\\, _, [var_name, defaults]} | pararms]) when is_list(defaults) do
+  defmacro defp(definition = {_fn_name, _meta, params}, [do: content]) do
     quote do
-      var!(unquote(var_name)) = Keyword.merge(unquote(defaults), var!(unquote(var_name)))
+      Kernel.defp(unquote(definition)) do
+        merge_defaults(unquote(params))
+        unquote(content)
+      end
     end
   end
-  defmacro merge_defaults([{:\\, _, [var_name, {:%{}, _, defaults}]} | pararms]) do
+
+  defmacro merge_defaults([]), do: nil
+  defmacro merge_defaults([{:\\, _, [var_name, defaults]} | params]) when is_list(defaults) do
+    quote do
+      var!(unquote(var_name)) = Keyword.merge(unquote(defaults), var!(unquote(var_name)))
+      merge_defaults(unquote(params))
+    end
+  end
+  defmacro merge_defaults([{:\\, _, [var_name, {:%{}, _, defaults}]} | params]) do
     quote do
       var!(unquote(var_name)) = Map.merge(Enum.into(unquote(defaults), %{}), var!(unquote(var_name)))
+      merge_defaults(unquote(params))
     end
   end
   defmacro merge_defaults([_no_default | params]) do

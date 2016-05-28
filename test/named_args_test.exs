@@ -50,6 +50,43 @@ defmodule NamedArgsTest do
     assert KeywordWithOther.test(:value, another: :changed, key: :changed) == [another: :changed, key: :changed]
   end
 
+  defmodule MultipleKeyword do
+    use NamedArgs
+    def test(:value, options \\ [key: :value, another: :value], other_opts \\ [default: :value, other: :stuff]) do
+      {options, other_opts}
+    end
+  end
+
+  test "multiple - no args" do
+    assert MultipleKeyword.test(:value)  == {[key: :value, another: :value], [default: :value, other: :stuff]}
+  end
+
+  test "multiple - one arg" do
+    assert MultipleKeyword.test(:value, key: :changed) == {[another: :value, key: :changed], [default: :value, other: :stuff]}
+  end
+
+  test "multiple - other arg" do
+    assert MultipleKeyword.test(:value, another: :changed) == {[key: :value, another: :changed], [default: :value, other: :stuff]}
+  end
+
+  test "multiple - both args" do
+    assert MultipleKeyword.test(:value, key: :changed, another: :changed) == {[key: :changed, another: :changed], [default: :value, other: :stuff]}
+    assert MultipleKeyword.test(:value, another: :changed, key: :changed) == {[another: :changed, key: :changed], [default: :value, other: :stuff]}
+  end
+
+  test "multiple second arg - one arg" do
+    assert MultipleKeyword.test(:value, [], default: :changed) == {[key: :value, another: :value], [other: :stuff, default: :changed]}
+  end
+
+  test "multiple second arg - other arg" do
+    assert MultipleKeyword.test(:value, [], other: :changed) == {[key: :value, another: :value], [default: :value, other: :changed]}
+  end
+
+  test "multiple second arg - both args" do
+    assert MultipleKeyword.test(:value, [], default: :changed, other: :changed) == {[key: :value, another: :value], [default: :changed, other: :changed]}
+    assert MultipleKeyword.test(:value, [], other: :changed, default: :changed) == {[key: :value, another: :value], [other: :changed, default: :changed]}
+  end
+
   defmodule MapArg do
     use NamedArgs
     def test(options \\ %{key: :value, another: :value}) do
@@ -85,6 +122,23 @@ defmodule NamedArgsTest do
 
   test "allows using default params as usual" do
     assert DefaultArgs.test("data", 456, :bar) == {"data", 456, :bar}
+  end
+
+  defmodule Private do
+    use NamedArgs
+    def test(nil), do: _test()
+    def test(opts), do: _test(opts)
+    defp _test(opts \\ [key: :value]) do
+      opts
+    end
+  end
+
+  test "private arguments - no args" do
+    assert Private.test(nil) == [key: :value]
+  end
+
+  test "private arguments - with values" do
+    assert Private.test(key: :data) == [key: :data]
   end
 
 end
