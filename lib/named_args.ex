@@ -1,4 +1,27 @@
 defmodule NamedArgs do
+  @moduledoc """
+  Provides default values for default arguments when other values are specified. For example:
+
+      defmodule MyModule do
+        use NamedArgs
+
+        def some_func(data, opts \\\\ [option1: "default", option2: "other"]) do
+          \# opts is guaranteed to have both `option1` and `option2` keys
+        end
+      end
+
+  It works if you use a map as well!
+
+      defmodule MyModule do
+        use NamedArgs
+
+        def some_func(data, opts \\\\ %{option1: "default", option2: "other"}) do
+          \# opts is guaranteed to have both `option1` and `option2` keys
+        end
+      end
+  """
+
+  @doc false
   defmacro __using__(_) do
     quote do
       import Kernel, except: [def: 2, defp: 2]
@@ -6,6 +29,7 @@ defmodule NamedArgs do
     end
   end
 
+  @doc false
   defmacro def(definition = {_fn_name, _meta, params}, [do: content]) do
     quote do
       Kernel.def(unquote(definition)) do
@@ -15,6 +39,7 @@ defmodule NamedArgs do
     end
   end
 
+  @doc false
   defmacro defp(definition = {_fn_name, _meta, params}, [do: content]) do
     quote do
       Kernel.defp(unquote(definition)) do
@@ -24,6 +49,7 @@ defmodule NamedArgs do
     end
   end
 
+  @doc false
   defmacro merge_defaults([]), do: nil
   defmacro merge_defaults([{:\\, _, [var_name, defaults]} | params]) when is_list(defaults) do
     quote do
