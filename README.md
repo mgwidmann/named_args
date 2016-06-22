@@ -45,7 +45,7 @@ Talk.introduction(birthday: "1986-01-01", name: "Joe") # => Hi my name is Joe an
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
+This package is [available in Hex](https://hex.pm/packages/named_args), to install:
 
   1. Add named_args to your list of dependencies in `mix.exs`:
 
