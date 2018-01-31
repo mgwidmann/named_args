@@ -2,21 +2,23 @@ defmodule NamedArgs.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :named_args,
-     version: "0.1.0",
-     elixir: "~> 1.0",
-     name: "named_args",
-     source_url: "git@github.com:mgwidmann/named_args.git",
-     homepage_url: "https://github.com/mgwidmann/named_args",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: "Ensures default maps and keyword lists have the defaults specified.",
-     docs: [
-       main: NamedArgs,
-       readme: "README.md"
-     ],
-     package: package,
-     deps: deps]
+    [
+      app: :named_args,
+      version: "0.1.1",
+      elixir: "~> 1.0",
+      name: "named_args",
+      source_url: "git@github.com:mgwidmann/named_args.git",
+      homepage_url: "https://github.com/mgwidmann/named_args",
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      description: "Ensures default maps and keyword lists have the defaults specified.",
+      docs: [
+        main: NamedArgs,
+        readme: "README.md"
+      ],
+      package: package(),
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application
@@ -37,8 +39,8 @@ defmodule NamedArgs.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:ex_doc, "~> 0.10", only: :dev},
-      {:earmark, "~> 0.1", only: :dev}
+      {:ex_doc, "~> 0.18", only: :dev},
+      {:earmark, "~> 1.2", only: :dev}
     ]
   end
 
